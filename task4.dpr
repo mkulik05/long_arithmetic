@@ -47,56 +47,7 @@ end;
 
 function Sum(n1, n2: AnsiString): AnsiString;
 var
-    i, n1_digit, n2_digit, res, l1, l2, trash: Integer;
-    save_one: Integer;
-    sum: Integer;
-    answ, res_string: AnsiString;
-begin
-    save_one := 0;
-    sum := 0;
-    l1 := length(n1);
-    l2 := length(n2);
-    while (l1 > l2) do
-    begin
-        n2 := '0' + n2;
-        l2 := length(n2);
-    end;
-    while (l2 > l1) do
-    begin
-        n1 := '0' + n1;
-        l1 := length(n1);
-    end;
-
-    for i := l1 downto 1 do
-    begin
-        Val(n1[i], n1_digit, trash);
-        Val(n2[i], n2_digit, trash);
-        sum := n1_digit + n2_digit;
-
-        sum := sum + save_one;
-        if sum > 9 then
-        begin
-            save_one := 1;
-            sum := sum - 10;
-        end
-        else
-        begin
-            save_one := 0;
-        end;
-
-        Str(sum, res_string);
-        answ := res_string + answ;
-    end;
-    if (save_one = 1) then
-        answ := '1' + answ;
-    Result := answ;
-
-end;
-
-
-function Sum1(n1, n2: AnsiString): AnsiString;
-var
-    i, n1_digit, n2_digit, res, l1, l2, trash, l_delta: Integer;
+    i, n1_digit, n2_digit, l1, l2, trash, l_delta: Integer;
     save_one: Integer;
     sum: Integer;
     answ, res_string, n0, second_part: AnsiString;
@@ -131,15 +82,18 @@ begin
         Str(sum, res_string);
         answ := res_string + answ;
     end;
+
     i := l_delta;
     second_part := n2;
     setLength(second_part, i);
+
     while (save_one = 1) do
     begin
+
         Val(n2[i], n2_digit, trash);
-        if n2_digit = 9 then
+        if n2_digit < 9 then
         begin
-            Str(sum, res_string);
+            Str(n2_digit + 1, res_string);
             second_part[i] := res_string[1];
             break
         end
@@ -159,51 +113,71 @@ begin
 end;
 
 
+
 function Subtract(n1, n2: AnsiString): AnsiString;
 var
-    i, n1_digit, n2_digit, res, l1, l2, trash: Integer;
-    take_one: Integer;
-    Subtr: Integer;
-    answ, res_string: AnsiString;
+    i, n1_digit, n2_digit, l1, l2, trash, l_delta: Integer;
+    save_one: Integer;
+    Subtraction: Integer;
+    answ, res_string, n0, second_part: AnsiString;
 begin
-    take_one := 0;
-    Subtr := 0;
-    // Result := 'result '+ n1;
+    save_one := 0;
+    if (length(n1) < length(n2)) then
+    begin
+        n0 := n1;
+        n1 := n2;
+        n2 := n0;
+    end;
+
     l1 := length(n1);
     l2 := length(n2);
-    while (l1 > l2) do
+    l_delta := l1 - l2;
+    writeln(l1, ' ', l2);
+    for i := l2 downto 1 do
     begin
-        n2 := '0' + n2;
-        l2 := length(n2);
-    end;
-    while (l2 > l1) do
-    begin
-        n1 := '0' + n1;
-        l1 := length(n1);
-    end;
-
-    for i := l1 downto 1 do
-    begin
-        Val(n1[i], n1_digit, trash);
+        Val(n1[i + l_delta], n1_digit, trash);
         Val(n2[i], n2_digit, trash);
-        Subtr := n1_digit - n2_digit;
+        Subtraction := n1_digit - n2_digit;
 
-        Subtr := Subtr - take_one;
-        if Subtr < 0 then
+        Subtraction := Subtraction + save_one;
+        if Subtraction < 0 then
         begin
-            take_one := 1;
-            Subtr := Subtr + 10;
+            save_one := -1;
+            Subtraction := Subtraction + 10;
         end
         else
         begin
-            take_one := 0;
+            save_one := 0;
         end;
 
-        Str(Subtr, res_string);
+        Str(Subtraction, res_string);
         answ := res_string + answ;
     end;
-    Result := answ;
+
+    i := l_delta;
+    second_part := n2;
+    setLength(second_part, i);
+
+    while (save_one = -1) do
+    begin
+
+        Val(n2[i], n2_digit, trash);
+        if n2_digit > 0 then
+        begin
+            Str(n2_digit - 1, res_string);
+            second_part[i] := res_string[1];
+            break
+        end
+        else
+        begin
+            second_part[i] := '9';
+        end;
+        i := i - 1;
+    end;
+    Result := second_part + answ;
+
 end;
+
 
 function Multiplication1(n1, n2: AnsiString): AnsiString;
 var
@@ -214,7 +188,6 @@ var
     answ, res_string: AnsiString;
 begin
     add_to_next := 0;
-    multipl := 0;
     Val(n2, n2_digit, trash);
     l1 := length(n1);
     for i := l1 downto 1 do
@@ -241,6 +214,8 @@ begin
         answ := last_digit + answ;
     Result := answ;
 end;
+
+
 
 function Multiplication2(n1, n2: AnsiString): AnsiString;
 var
@@ -288,5 +263,5 @@ Begin
     readln(n2);
     // n1_arr := StrToArray(n1);
     // n2_arr := StrToArray(n2);
-    Writeln(Multiplication2(n1, n2));
+    Writeln(Sum(n1, n2));
 End.

@@ -21,13 +21,13 @@ correctN=0
 
 while [ $counter -gt 0 ]
 do
-    ./task4 < task4_input.txt
-    # if ./task4 < task4_input.txt | grep -q $answer; then
-    #     echo "Answer matched"
-    #     correctN=$(( $correctN + 1 ))
-    # else
-    #     echo "Answer not matched"
-    # fi
+    # ./task4 < task4_input.txt
+    if ./task4 < task4_input.txt | grep -q $answer; then
+        echo "Answer matched"
+        correctN=$(( $correctN + 1 ))
+    else
+        echo "Answer not matched"
+    fi
     counter=$(( $counter - 1 ))
 done
 
