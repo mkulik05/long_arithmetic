@@ -192,21 +192,20 @@ begin
 end;
 
 
-function Multiplication1(n1, n2: AnsiString): AnsiString;
+function Multiplication1(n1: IntegerArray; n2: Integer): IntegerArray;
 var
-    i, n1_digit, n2_digit, res, l1, l2, trash: Integer;
+    i, res, l1: Integer;
     add_to_next: Integer;
-    last_digit: AnsiString;
     multipl: Integer;
-    answ, res_string: AnsiString;
+    answ, res_string: IntegerArray;
 begin
     add_to_next := 0;
-    Val(n2, n2_digit, trash);
+
     l1 := length(n1);
-    for i := l1 downto 1 do
+    answ := n1;
+    for i := 0 to l1 - 1 do
     begin
-        Val(n1[i], n1_digit, trash);
-        multipl := n1_digit * n2_digit;
+        multipl := n1[i] * n2;
 
         multipl := multipl + add_to_next;
         if multipl > 9 then
@@ -219,12 +218,11 @@ begin
             add_to_next := 0;
         end;
 
-        Str(multipl, res_string);
-        answ := res_string + answ;
+        answ[i] := multipl;
     end;
     if (add_to_next > 0) then
-        Str(add_to_next, last_digit);
-        answ := last_digit + answ;
+        setLength(answ, l1 + 1);
+        answ[l1] := add_to_next;
     Result := answ;
 end;
 
@@ -279,5 +277,5 @@ Begin
     n2_arr := ReverseArray(StrToArray(n2));
 
 
-    ShowArray(ReverseArray(Subtract(n1_arr, n2_arr)));
+    ShowArray(ReverseArray(Multiplication1(n1_arr, 9)));
 End.
