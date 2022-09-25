@@ -53,7 +53,7 @@ begin
     if l1 = l2 then
     begin
         Result := 0;
-        for i := 1 to l1 do
+        for i := 0 to l1 - 1 do
         begin
             n1_digit := n1[i];
             n2_digit := n2[i];
