@@ -40,7 +40,7 @@ end;
 
 
 // return -1 if n1 < n2, 0 if n1 = n2, 1 if n1 > n2
-function Compare(n1, n2: AnsiString): Integer;
+function Compare(n1, n2: IntegerArray): Integer;
 var
     l1, l2, i, n1_digit, n2_digit, trash: Integer;
 begin
@@ -55,8 +55,8 @@ begin
         Result := 0;
         for i := 1 to l1 do
         begin
-            Val(n1[i], n1_digit, trash);
-            Val(n2[i], n2_digit, trash);
+            n1_digit := n1[i];
+            n2_digit := n2[i];
             if (n1_digit > n2_digit) then
             begin
                 Result := 1;
@@ -298,5 +298,6 @@ Begin
 
     // ShowArray(n2_arr);
     // writeln(' ');
-    ShowArray(ReverseArray(Sum(n1_arr, n2_arr)));
+    writeln(Compare(n1_arr, n2_arr));
+    // ShowArray(ReverseArray(Sum(n1_arr, n2_arr)));
 End.
