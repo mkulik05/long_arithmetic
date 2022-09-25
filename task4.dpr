@@ -19,8 +19,8 @@ var
 begin
     for i := 0 to length(arr) - 1 do
         write(arr[i]);
+    writeln('');
 end;
-
 
 function ReverseArray(arr: IntegerArray): IntegerArray;
 var
@@ -151,7 +151,7 @@ var
 begin
     save_one := 0;
     l2 := length(n2);
-    answ := n2;
+    answ := n1;
     for i := 0 to l2 - 1 do
     begin
         n1_digit := n1[i];
@@ -159,10 +159,10 @@ begin
         substraction := n1_digit - n2_digit;
 
         substraction := substraction + save_one;
-        if substraction  < 0 then
+        if substraction < 0 then
         begin
             save_one := -1;
-            substraction := substraction - 10;
+            substraction := substraction + 10;
         end
         else
         begin
@@ -175,15 +175,14 @@ begin
     i := l2;
     while (save_one = -1) do
     begin
-        n2_digit := n2[i];
-        writeln(n2_digit);
-        if n2_digit = 0 then
+        n1_digit := n1[i];
+        if n1_digit = 0 then
         begin
             answ[i] := 9;
         end
         else
         begin
-            answ[i] := n2_digit - 1;
+            answ[i] := n1_digit - 1;
             break
         end;
         i := i + 1;
@@ -278,12 +277,7 @@ Begin
     readln(n2);
     n1_arr := ReverseArray(StrToArray(n1));
     n2_arr := ReverseArray(StrToArray(n2));
-    // ShowArray(StrToArray(n1));
-    // write(' - ');
-    // ShowArray(StrToArray(n1));
 
-    // ShowArray(n2_arr);
-    // writeln(' ');
-    // writeln(Subtraction(n1_arr, n2_arr));
-    ShowArray(ReverseArray(Subtraction(n1_arr, n2_arr)));
+
+    ShowArray(ReverseArray(Subtract(n1_arr, n2_arr)));
 End.
