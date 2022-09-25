@@ -6,11 +6,39 @@ uses
     Math;
 
 type
-    CharArray = array of char;
+    IntegerArray = array of Integer;
 
 Var
     n1, n2, result: AnsiString;
-    n1_arr, n2_arr: array of char;
+    n1_arr, n2_arr: IntegerArray;
+
+
+function ShowArray(arr: IntegerArray): String;
+var 
+    i: Integer;
+begin
+    for i := 0 to length(arr) - 1 do
+        write(arr[i]);
+end;
+
+
+function ReverseArray(arr: IntegerArray): IntegerArray;
+var
+    i, len, len2, tmp: Integer;
+
+begin
+    Result := arr;
+    len := length(arr) - 1;
+    len2 := len DIV 2;
+    for i := 0 to len2 do
+    begin
+        tmp := Result[i];
+        Result[i] := Result[len - i];
+        Result[len - i] := tmp;
+    end;
+end;
+
+
 // return -1 if n1 < n2, 0 if n1 = n2, 1 if n1 > n2
 function Compare(n1, n2: AnsiString): Integer;
 var
@@ -44,16 +72,17 @@ begin
     end;
 end;
 
-
-function Sum(n1, n2: AnsiString): AnsiString;
+function Sum(n1, n2: IntegerArray): IntegerArray;
 var
-    i, n1_digit, n2_digit, l1, l2, trash, l_delta: Integer;
+    i, n1_digit, n2_digit, l1, l2, l_delta: Integer;
     save_one: Integer;
     sum: Integer;
-    answ, res_string, n0, second_part: AnsiString;
+    answ, n0: IntegerArray;
 begin
     save_one := 0;
-    if (length(n1) > length(n2)) then
+    l1 := length(n1);
+    l2 := length(n2);
+    if (l1 > l2) then
     begin
         n0 := n1;
         n1 := n2;
@@ -61,11 +90,12 @@ begin
     end;
     l1 := length(n1);
     l2 := length(n2);
+    answ := n2;
     l_delta := l2 - l1;
-    for i := l1 downto 1 do
+    for i := 0 to l1 - 1 do
     begin
-        Val(n1[i], n1_digit, trash);
-        Val(n2[i + l_delta], n2_digit, trash);
+        n1_digit := n1[i];
+        n2_digit := n2[i];
         sum := n1_digit + n2_digit;
 
         sum := sum + save_one;
@@ -79,36 +109,34 @@ begin
             save_one := 0;
         end;
 
-        Str(sum, res_string);
-        answ := res_string + answ;
+        answ[i] := sum;
     end;
 
-    i := l_delta;
-    second_part := n2;
-    setLength(second_part, i);
-
+    i := l1;
     while (save_one = 1) do
     begin
-
-        Val(n2[i], n2_digit, trash);
-        if n2_digit < 9 then
+        if i >= l2 then
         begin
-            Str(n2_digit + 1, res_string);
-            second_part[i] := res_string[1];
-            break
+            setLength(answ, l2 + 1);
+            answ[l2] := 1;
+            break;
+        end;
+
+        n2_digit := n2[i];
+        writeln(n2_digit);
+        if n2_digit = 9 then
+        begin
+
+            answ[i] := 0;
         end
         else
         begin
-            second_part[i] := '0';
+            answ[i] := n2_digit + 1;
+            break
         end;
-        if i = 1 then
-        begin
-            second_part := '1' + second_part;
-            break;
-        end;
-        i := i - 1;
+        i := i + 1;
     end;
-    Result := second_part + answ;
+    Result := answ;
 
 end;
 
@@ -217,51 +245,58 @@ end;
 
 
 
-function Multiplication2(n1, n2: AnsiString): AnsiString;
+// function Multiplication2(n1, n2: AnsiString): AnsiString;
+// var
+//     i, n1_digit, n2_digit, l1, l2, a: Integer;
+//     answ, res_string, res, multipl: AnsiString;
+//     ops: array of AnsiString;
+// begin
+//     l1 := length(n1);
+//     l2 := length(n2);
+//     setLength(ops, l2);
+//     for i := l2 downto 1 do
+//     begin
+//         res :=  Multiplication1(n1, n2[i]);
+//         if l2 - i  > 0 then
+//         begin
+//           for a := 1 to (l2 - i) do
+//           begin
+//             res := res + '0';
+//           end;
+//         end;
+//         ops[i] := res;
+//     end;
+//     for i := 1 to l2 do
+//         multipl := Sum(multipl, ops[i]);
+
+//     Result := multipl;
+// end;
+
+
+function StrToArray(str: string): IntegerArray;
 var
-    i, n1_digit, n2_digit, l1, l2, a: Integer;
-    answ, res_string, res, multipl: AnsiString;
-    ops: array of AnsiString;
+    len, i, digit: Integer;
+    res: IntegerArray;
 begin
-    l1 := length(n1);
-    l2 := length(n2);
-    setLength(ops, l2);
-    for i := l2 downto 1 do
-    begin
-        res :=  Multiplication1(n1, n2[i]);
-        if l2 - i  > 0 then
-        begin
-          for a := 1 to (l2 - i) do
-          begin
-            res := res + '0';
-          end;
-        end;
-        ops[i] := res;
-    end;
-    for i := 1 to l2 do
-        multipl := Sum(multipl, ops[i]);
-
-    Result := multipl;
-end;
-
-
-function StrToArray(str: string): CharArray;
-var
-    len, i: Integer;
-    res: CharArray;
-begin
-len := length(str);
+    len := length(str);
     setLength(Result, len);
-    for i := 1 to len  do
+    for i := 1 to len do
     begin
-        Result[i] := str[i];
+        Val(str[i], digit);
+        Result[i - 1] := digit;
     end;
 end;
 
 Begin
     readln(n1);
     readln(n2);
-    // n1_arr := StrToArray(n1);
-    // n2_arr := StrToArray(n2);
-    Writeln(Sum(n1, n2));
+    n1_arr := ReverseArray(StrToArray(n1));
+    n2_arr := ReverseArray(StrToArray(n2));
+    // ShowArray(StrToArray(n1));
+    // write(' - ');
+    // ShowArray(StrToArray(n1));
+
+    // ShowArray(n2_arr);
+    // writeln(' ');
+    ShowArray(ReverseArray(Sum(n1_arr, n2_arr)));
 End.
