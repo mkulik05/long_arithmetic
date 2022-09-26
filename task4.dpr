@@ -22,23 +22,6 @@ begin
         write(arr[i]);
 end;
 
-function ReverseArray(arr: IntegerArray): IntegerArray;
-var
-    i, len, len2, tmp: Integer;
-
-begin
-    Result := arr;
-    len := length(arr) - 1;
-    len2 := len DIV 2;
-    for i := 0 to len2 do
-    begin
-        tmp := Result[i];
-        Result[i] := Result[len - i];
-        Result[len - i] := tmp;
-    end;
-end;
-
-
 // return -1 if n1 < n2, 0 if n1 = n2, 1 if n1 > n2
 function Compare(n1, n2: IntegerArray): Integer;
 var
@@ -89,13 +72,17 @@ begin
         n2 := n0;
     end;
     l1 := length(n1);
-    l2 := length(n2);
-    answ := Copy(n2);
-    l_delta := l2 - l1;
-    for i := 0 to l1 - 1 do
+    l2 := length(n2) + 1;
+    setLength(answ, l2);
+    answ[0] := 0;
+    for i := 1 to l2 - 1 do
+        answ[i] := n2[i - 1];
+    l_delta := l2 - l1 - 1;
+    for i := l1 - 1 downto 0 do
     begin
         n1_digit := n1[i];
-        n2_digit := n2[i];
+        n2_digit := n2[i + l_delta];
+
         sum := n1_digit + n2_digit;
 
         sum := sum + save_one;
@@ -109,20 +96,18 @@ begin
             save_one := 0;
         end;
 
-        answ[i] := sum;
+        answ[i + l_delta + 1] := sum;
     end;
-
-    i := l1;
+    i := l_delta;
     while (save_one = 1) do
     begin
-        if i >= l2 then
+        if i <= 0 then
         begin
-            setLength(answ, l2 + 1);
-            answ[l2] := 1;
+            answ[0] := 1;
             break;
         end;
 
-        n2_digit := n2[i];
+        n2_digit := n2[i - 1];
         if n2_digit = 9 then
         begin
 
@@ -133,7 +118,7 @@ begin
             answ[i] := n2_digit + 1;
             break
         end;
-        i := i + 1;
+        i := i - 1;
     end;
     Result := answ;
 
@@ -150,13 +135,14 @@ var
 begin
     save_one := 0;
     l2 := length(n2);
+    l1 := length(n1);
+    l_delta := l1 - l2;
     answ := Copy(n1);
-    for i := 0 to l2 - 1 do
+    for i := l2 - 1 downto 0 do
     begin
-        n1_digit := n1[i];
+        n1_digit := n1[i + l_delta];
         n2_digit := n2[i];
         substraction := n1_digit - n2_digit;
-
         substraction := substraction + save_one;
         if substraction < 0 then
         begin
@@ -167,14 +153,14 @@ begin
         begin
             save_one := 0;
         end;
-
-        answ[i] := substraction;
+        answ[i + l_delta] := substraction;
     end;
 
-    i := l2;
+    i := l_delta - 1;
     while (save_one = -1) do
     begin
         n1_digit := n1[i];
+        ShowArray(n1);
         if n1_digit = 0 then
         begin
             answ[i] := 9;
@@ -184,7 +170,7 @@ begin
             answ[i] := n1_digit - 1;
             break
         end;
-        i := i + 1;
+        i := i - 1;
     end;
     Result := answ;
 
@@ -200,8 +186,11 @@ var
 begin
     add_to_next := 0;
     l1 := length(n1);
-    answ := Copy(n1);
-    for i := 0 to l1 - 1 do
+    setLength(answ, l1 + 1);
+    answ[0] := 0;
+    for i := 1 to l1 - 1 do
+        answ[i] := n1[i - 1];
+    for i := l1 - 1 downto 0 do
     begin
         multipl := n1[i] * n2;
 
@@ -216,11 +205,10 @@ begin
             add_to_next := 0;
         end;
 
-        answ[i] := multipl;
+        answ[i + 1] := multipl;
     end;
     if (add_to_next > 0) then
-        setLength(answ, l1 + 1);
-        answ[l1] := add_to_next;
+        answ[0] := add_to_next;
     Result := answ;
 end;
 
@@ -228,7 +216,7 @@ end;
 
 function Multiplication2(n1, n2: IntegerArray): IntegerArray;
 var
-    i, n1_digit, n2_digit, l1, l2, a, currI, l: Integer;
+    i, n1_digit, n2_digit, l1, l2, a, currI, l, shift: Integer;
     answ, res_string, res, multipl, tmpArray: IntegerArray;
     ops, calculations: array of IntegerArray;
 begin
@@ -242,24 +230,22 @@ begin
         calculations[i] := Multiplication1(Copy(n1), i);
     end;
 
-    for i := 0 to l2 - 1 do
+    for i := l2 - 1 downto 0 do
     begin
     // shift to the right (shift = i)
+        shift := l2 - 1 - i;
         tmpArray := calculations[n2[i]];
         l := length(tmpArray);
-        setLength(tmpArray, l + i);
-        for currI := l - 1 downto 0 do
+        setLength(tmpArray, l + shift);
+        for currI := 0 to shift - 1 do
         begin
-            tmpArray[currI + i] := tmpArray[currI];
-        end;
-
-        for currI := 0 to i - 1 do
-        begin
-            tmpArray[currI] := 0;
+            tmpArray[l + shift - currI] := 0;
         end;
     // end of shift
 
         ops[i] := tmpArray;
+        ShowArray(ops[i]);
+        writeln('');
     end;
 
     for i := 0 to l2 - 1 do
@@ -288,13 +274,13 @@ Begin
     readln(n1);
     readln(n2);
     readln(operation);
-    n1_arr := ReverseArray(StrToArray(n1));
-    n2_arr := ReverseArray(StrToArray(n2));
+    n1_arr := StrToArray(n1);
+    n2_arr := StrToArray(n2);
 
     if operation = 'Sum' then
-        ShowArray(ReverseArray(Sum(n1_arr, n2_arr)));
+        ShowArray(Sum(n1_arr, n2_arr));
     if operation = 'Subtract' then
-        ShowArray(ReverseArray(Subtract(n1_arr, n2_arr)));
-    if operation = 'Multiplication2' then
-        ShowArray(ReverseArray(Multiplication2(n1_arr, n2_arr)));
+        ShowArray(Subtract(n1_arr, n2_arr));
+    if operation = '*' then
+        ShowArray(Multiplication2(n1_arr, n2_arr));
 End.
