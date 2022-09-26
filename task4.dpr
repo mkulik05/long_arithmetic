@@ -9,8 +9,9 @@ type
     IntegerArray = array of Integer;
 
 Var
-    n1, n2, result: AnsiString;
+    n1, n2, operation: AnsiString;
     n1_arr, n2_arr: IntegerArray;
+
 
 
 function ShowArray(arr: IntegerArray): String;
@@ -19,7 +20,6 @@ var
 begin
     for i := 0 to length(arr) - 1 do
         write(arr[i]);
-    writeln('');
 end;
 
 function ReverseArray(arr: IntegerArray): IntegerArray;
@@ -84,13 +84,13 @@ begin
     l2 := length(n2);
     if (l1 > l2) then
     begin
-        n0 := n1;
-        n1 := n2;
+        n0 := Copy(n1);
+        n1 := Copy(n2);
         n2 := n0;
     end;
     l1 := length(n1);
     l2 := length(n2);
-    answ := n2;
+    answ := Copy(n2);
     l_delta := l2 - l1;
     for i := 0 to l1 - 1 do
     begin
@@ -123,7 +123,6 @@ begin
         end;
 
         n2_digit := n2[i];
-        writeln(n2_digit);
         if n2_digit = 9 then
         begin
 
@@ -151,7 +150,7 @@ var
 begin
     save_one := 0;
     l2 := length(n2);
-    answ := n1;
+    answ := Copy(n1);
     for i := 0 to l2 - 1 do
     begin
         n1_digit := n1[i];
@@ -200,9 +199,8 @@ var
     answ, res_string: IntegerArray;
 begin
     add_to_next := 0;
-
     l1 := length(n1);
-    answ := n1;
+    answ := Copy(n1);
     for i := 0 to l1 - 1 do
     begin
         multipl := n1[i] * n2;
@@ -228,32 +226,47 @@ end;
 
 
 
-// function Multiplication2(n1, n2: AnsiString): AnsiString;
-// var
-//     i, n1_digit, n2_digit, l1, l2, a: Integer;
-//     answ, res_string, res, multipl: AnsiString;
-//     ops: array of AnsiString;
-// begin
-//     l1 := length(n1);
-//     l2 := length(n2);
-//     setLength(ops, l2);
-//     for i := l2 downto 1 do
-//     begin
-//         res :=  Multiplication1(n1, n2[i]);
-//         if l2 - i  > 0 then
-//         begin
-//           for a := 1 to (l2 - i) do
-//           begin
-//             res := res + '0';
-//           end;
-//         end;
-//         ops[i] := res;
-//     end;
-//     for i := 1 to l2 do
-//         multipl := Sum(multipl, ops[i]);
+function Multiplication2(n1, n2: IntegerArray): IntegerArray;
+var
+    i, n1_digit, n2_digit, l1, l2, a, currI, l: Integer;
+    answ, res_string, res, multipl, tmpArray: IntegerArray;
+    ops, calculations: array of IntegerArray;
+begin
+    l1 := length(n1);
+    l2 := length(n2);
+    setLength(ops, l2);
+    setLength(calculations, 10);
+    for i := 0 to 9 do 
+    begin
+        
+        calculations[i] := Multiplication1(Copy(n1), i);
+    end;
 
-//     Result := multipl;
-// end;
+    for i := 0 to l2 - 1 do
+    begin
+    // shift to the right (shift = i)
+        tmpArray := calculations[n2[i]];
+        l := length(tmpArray);
+        setLength(tmpArray, l + i);
+        for currI := l - 1 downto 0 do
+        begin
+            tmpArray[currI + i] := tmpArray[currI];
+        end;
+
+        for currI := 0 to i - 1 do
+        begin
+            tmpArray[currI] := 0;
+        end;
+    // end of shift
+
+        ops[i] := tmpArray;
+    end;
+
+    for i := 0 to l2 - 1 do
+        multipl := Sum(multipl, ops[i]);
+
+    Result := multipl;
+end;
 
 
 function StrToArray(str: string): IntegerArray;
@@ -271,11 +284,17 @@ begin
 end;
 
 Begin
+
     readln(n1);
     readln(n2);
+    readln(operation);
     n1_arr := ReverseArray(StrToArray(n1));
     n2_arr := ReverseArray(StrToArray(n2));
 
-
-    ShowArray(ReverseArray(Multiplication1(n1_arr, 9)));
+    if operation = 'Sum' then
+        ShowArray(ReverseArray(Sum(n1_arr, n2_arr)));
+    if operation = 'Subtract' then
+        ShowArray(ReverseArray(Subtract(n1_arr, n2_arr)));
+    if operation = 'Multiplication2' then
+        ShowArray(ReverseArray(Multiplication2(n1_arr, n2_arr)));
 End.
