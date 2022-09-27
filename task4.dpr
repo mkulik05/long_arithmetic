@@ -16,10 +16,17 @@ Var
 
 function ShowArray(arr: IntegerArray): String;
 var 
-    i: Integer;
+    i, el: Integer;
+    were_zeros: boolean = false;
 begin
     for i := 0 to length(arr) - 1 do
-        write(arr[i]);
+    begin
+        el := arr[i];
+        if el <> 0 then
+            were_zeros := true;
+        if were_zeros then
+            write(el);
+    end;
 end;
 
 function ReverseArray(arr: IntegerArray): IntegerArray;
@@ -219,8 +226,10 @@ begin
         answ[i] := multipl;
     end;
     if (add_to_next > 0) then
+    begin
         setLength(answ, l1 + 1);
         answ[l1] := add_to_next;
+    end;
     Result := answ;
 end;
 
@@ -238,7 +247,8 @@ begin
     setLength(calculations, 10);
     for i := 0 to 9 do 
     begin
-        
+        // ShowArray(Multiplication1(Copy(n1), i));
+        // writeln(' -', ' ', i);
         calculations[i] := Multiplication1(Copy(n1), i);
     end;
 
@@ -261,7 +271,6 @@ begin
 
         ops[i] := tmpArray;
     end;
-
     for i := 0 to l2 - 1 do
         multipl := Sum(multipl, ops[i]);
 
@@ -290,7 +299,6 @@ Begin
     readln(operation);
     n1_arr := ReverseArray(StrToArray(n1));
     n2_arr := ReverseArray(StrToArray(n2));
-
     if operation = 'Sum' then
         ShowArray(ReverseArray(Sum(n1_arr, n2_arr)));
     if operation = 'Subtract' then
