@@ -164,7 +164,6 @@ begin
     while (save_one = -1) do
     begin
         n1_digit := n1[i];
-        ShowArray(n1);
         if n1_digit = 0 then
         begin
             answ[i] := 9;
@@ -284,6 +283,6 @@ Begin
         ShowArray(Sum(n1_arr, n2_arr));
     if operation = 'Subtract' then
         ShowArray(Subtract(n1_arr, n2_arr));
-    if operation = '*' then
+    if operation = 'Multiplication2' then
         ShowArray(Multiplication2(n1_arr, n2_arr));
 End.
