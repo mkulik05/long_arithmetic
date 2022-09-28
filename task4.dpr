@@ -16,10 +16,17 @@ Var
 
 function ShowArray(arr: IntegerArray): String;
 var 
-    i: Integer;
+    i, el: Integer;
+    were_zeros: boolean = false;
 begin
     for i := 0 to length(arr) - 1 do
-        write(arr[i]);
+    begin
+        el := arr[i];
+        if el <> 0 then
+            were_zeros := true;
+        if were_zeros then
+            write(el);
+    end;
 end;
 
 // return -1 if n1 < n2, 0 if n1 = n2, 1 if n1 > n2
@@ -106,11 +113,9 @@ begin
             answ[0] := 1;
             break;
         end;
-
         n2_digit := n2[i - 1];
         if n2_digit = 9 then
         begin
-
             answ[i] := 0;
         end
         else
@@ -121,7 +126,6 @@ begin
         i := i - 1;
     end;
     Result := answ;
-
 end;
 
 
@@ -229,7 +233,6 @@ begin
         
         calculations[i] := Multiplication1(Copy(n1), i);
     end;
-
     for i := l2 - 1 downto 0 do
     begin
     // shift to the right (shift = i)
@@ -239,17 +242,17 @@ begin
         setLength(tmpArray, l + shift);
         for currI := 0 to shift - 1 do
         begin
-            tmpArray[l + shift - currI] := 0;
+            tmpArray[l + shift - currI - 1] := 0;
         end;
     // end of shift
 
         ops[i] := tmpArray;
-        ShowArray(ops[i]);
-        writeln('');
     end;
-
     for i := 0 to l2 - 1 do
+    begin
         multipl := Sum(multipl, ops[i]);
+
+    end;
 
     Result := multipl;
 end;
