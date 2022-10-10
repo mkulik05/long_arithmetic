@@ -1,0 +1,9 @@
+./main
+tests/answers*
+tests/correct*
+tests/res*.csv
+tests/task4_*
+tests/test.txt
+
+tests/in
+.vscode
