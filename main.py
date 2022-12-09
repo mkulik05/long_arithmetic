@@ -2,21 +2,40 @@ import time
 import random
 import os
 import json
+from sys import platform
+from inputimeout import inputimeout
 
-delay = 5 # in seconds
-needCorrectAnsws = 3
-wordsInRound = 5
+showDelay = 5               # время показа вопроса
+enableAnswerDelay = True # ограничено ли время на ответ
+answerDelay = 5             # время на ответ
+needCorrectAnsws = 3        # количество правильным ответов для переходов далее
+wordsInRound = 5            # количество слов в раундах 2-5
+
+
+if platform == "linux" or platform == "linux2":
+  clear = lambda: os.system('clear')
+else:
+  clear = lambda: os.system('cls')
 
 f = open("data.json")
 data = f.read()
 words = json.loads(data)
 
-# clear = lambda: os.system('cls')
-clear = lambda: os.system('clear')
+def inp (text = '', delay = answerDelay):
+  timeEnded = False
+  if enableAnswerDelay:
+    try:
+      res = inputimeout(prompt=text, timeout=delay)
+    except Exception:
+      res = ''
+      timeEnded = True
+  else:
+    res = input(text)
+  return res, timeEnded
 
 def showStr(str):
   print(str)
-  time.sleep(delay)
+  time.sleep(showDelay)
   clear()
 
 def invert(word):
@@ -37,12 +56,15 @@ def round1 ():
     while correctAnsws < needCorrectAnsws:
       word = selectWord(i)
       showStr(word)
-      userWord = input()
+      userWord, timeEnded = inp('> ')
       if strMatch(word, invert(userWord)):
-        print("Correct, {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
         correctAnsws += 1
       else:
-        print("Incorrect")
+        if not timeEnded:
+          print("Ответ неверный")
+        else:
+          print("Время вышло")
         correctAnsws = 0
       time.sleep(1)
       clear()
@@ -56,13 +78,16 @@ def round2(wordsN):
         words.append(selectWord(i))
       wordsSet = set(words)
       showStr(makeQuestion(words))
-      userInp = input()
-      userWords = set([w.lower() for w in userInp.split()])
+      userInp = inp('> ')
+      userWords, timeEnded = set([w.lower() for w in userInp.split()])
       if userWords == wordsSet:
-        print("Correct, {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
         correctAnsws += 1
       else:
-        print("Incorrect")
+        if not timeEnded:
+          print("Ответ неверный")
+        else:
+          print("Время вышло")
         correctAnsws = 0
       time.sleep(1)
       clear()
@@ -76,13 +101,16 @@ def round3(wordsN):
       for _ in range(wordsN):
         words.append(selectWord(i))
       showStr(makeQuestion(words))
-      userInp = input()
-      userWords = [w.lower() for w in userInp.split()]
-      if userWords == wordsSet:
-        print("Correct, {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+      userInp = inp('> ')
+      userWords, timeEnded = [w.lower() for w in userInp.split()]
+      if userWords == words:
+        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
         correctAnsws += 1
       else:
-        print("Incorrect")
+        if not timeEnded:
+          print("Ответ неверный")
+        else:
+          print("Время вышло")
         correctAnsws = 0
       time.sleep(1)
       clear()
@@ -94,14 +122,18 @@ def round4(wordsN):
       words = []
       for _ in range(wordsN):
         words.append(selectWord(i))
+      wordsSet = set(words)
       showStr(makeQuestion(words))
-      userInp = input()
-      userWords = [invert(w.lower()) for w in userInp.split()]
+      userInp = inp('> ')
+      userWords, timeEnded = set([invert(w.lower()) for w in userInp.split()])
       if userWords == wordsSet:
-        print("Correct, {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
         correctAnsws += 1
       else:
-        print("Incorrect")
+        if not timeEnded:
+          print("Ответ неверный")
+        else:
+          print("Время вышло")
         correctAnsws = 0
       time.sleep(1)
       clear()
@@ -113,20 +145,23 @@ def round5(wordsN):
       words = []
       for _ in range(wordsN):
         words.append(selectWord(i))
-      wordsSet = set(words)
       showStr(makeQuestion(words))
-      userInp = input()
-      userWords = set([invert(w.lower()) for w in userInp.split()])
-      if userWords == wordsSet:
-        print("Correct, {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+      userInp, timeEnded = inp('> ')
+      userWords = [invert(w.lower()) for w in userInp.split()]
+      if userWords == words:
+        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
         correctAnsws += 1
       else:
-        print("Incorrect")
+        if not timeEnded:
+          print("Ответ неверный")
+        else:
+          print("Время вышло")
         correctAnsws = 0
       time.sleep(1)
       clear()
 
 def main ():
+  clear()
   round1()
   round2(wordsInRound)
   round3(wordsInRound)
