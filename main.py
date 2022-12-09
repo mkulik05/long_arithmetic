@@ -1,12 +1,15 @@
 import time
 import random
 import os
+import json
 
 delay = 5 # in seconds
 needCorrectAnsws = 3
 wordsInRound = 5
 
-words = {5: ["abcde"], 6: ["abcdef"], 7: ["abcdefg"], 8: ["abcdefgh"]}
+f = open("data.json")
+data = f.read()
+words = json.loads(data)
 
 # clear = lambda: os.system('cls')
 clear = lambda: os.system('clear')
@@ -26,7 +29,7 @@ def makeQuestion(arr):
   return ' '.join(arr)
 
 def selectWord(len):
-  return random.choice(words[len])
+  return random.choice(words[str(len)])
 
 def round1 ():
   for i in range(5, 9):
@@ -41,6 +44,7 @@ def round1 ():
       else:
         print("Incorrect")
         correctAnsws = 0
+      time.sleep(1)
       clear()
 
 def round2(wordsN):
@@ -60,6 +64,7 @@ def round2(wordsN):
       else:
         print("Incorrect")
         correctAnsws = 0
+      time.sleep(1)
       clear()
 
 
@@ -79,6 +84,7 @@ def round3(wordsN):
       else:
         print("Incorrect")
         correctAnsws = 0
+      time.sleep(1)
       clear()
 
 def round4(wordsN):
@@ -97,6 +103,7 @@ def round4(wordsN):
       else:
         print("Incorrect")
         correctAnsws = 0
+      time.sleep(1)
       clear()
 
 def round5(wordsN):
@@ -116,6 +123,7 @@ def round5(wordsN):
       else:
         print("Incorrect")
         correctAnsws = 0
+      time.sleep(1)
       clear()
 
 def main ():
