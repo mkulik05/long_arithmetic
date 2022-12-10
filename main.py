@@ -5,12 +5,10 @@ import json
 from sys import platform
 from inputimeout import inputimeout
 
-showDelay = 5               # время показа вопроса
-enableAnswerDelay = True # ограничено ли время на ответ
-answerDelay = 5             # время на ответ
+
 needCorrectAnsws = 3        # количество правильным ответов для переходов далее
 wordsInRound = 5            # количество слов в раундах 2-5
-
+TimeBetweenStages = 3
 
 if platform == "linux" or platform == "linux2":
   clear = lambda: os.system('clear')
@@ -21,21 +19,24 @@ f = open("data.json")
 data = f.read()
 words = json.loads(data)
 
-def inp (text = '', delay = answerDelay):
+f = open("settings.json")
+data = f.read()
+settings = json.loads(data)
+
+def inp (text = ''):
   timeEnded = False
-  if enableAnswerDelay:
-    try:
-      res = inputimeout(prompt=text, timeout=delay)
-    except Exception:
-      res = ''
-      timeEnded = True
-  else:
-    res = input(text)
-  return res, timeEnded
+  try:
+    res = inputimeout(prompt=text, timeout=TimeInput)
+  except Exception:
+    res = ''
+    timeEnded = True
+  reset = False
+  return res, timeEnded, reset
 
 def showStr(str):
+  global TimeDisplay
   print(str)
-  time.sleep(showDelay)
+  time.sleep(TimeDisplay)
   clear()
 
 def invert(word):
@@ -50,122 +51,220 @@ def makeQuestion(arr):
 def selectWord(len):
   return random.choice(words[str(len)])
 
-def round1 ():
+
+
+def stage1 ():
+  global ResetNum, ResetsN
+  madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
-    while correctAnsws < needCorrectAnsws:
+    while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       word = selectWord(i)
       showStr(word)
-      userWord, timeEnded = inp('> ')
-      if strMatch(word, invert(userWord)):
-        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
-        correctAnsws += 1
+      userWord, timeEnded, reset = inp('> ')
+      if reset and ResetAvailable and ResetsN < ResetNum:
+        ResetsN += 1
       else:
-        if not timeEnded:
-          print("Ответ неверный")
+        if strMatch(word, invert(userWord)):
+          print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+          correctAnsws += 1
         else:
-          print("Время вышло")
-        correctAnsws = 0
-      time.sleep(1)
+          if not timeEnded:
+            print("Ответ неверный")
+          else:
+            print("Время вышло")
+          madeErrs += 1
+          correctAnsws = 0
+          time.sleep(ErrPause)
+      time.sleep(TimePrepWord)
       clear()
+    if madeErrs >= ErrNum - 0.1:
+      return False
+    if ClearErrsEachInRound:
+      madeErrs = 0
+    time.sleep(TimeBetweenRounds)
+  return True
 
-def round2(wordsN):
+def stage2(wordsN = wordsInRound):
+  global ResetNum, ResetsN
+  madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
-    while correctAnsws < needCorrectAnsws:
+    while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       words = []
       for _ in range(wordsN):
         words.append(selectWord(i))
       wordsSet = set(words)
       showStr(makeQuestion(words))
       userInp = inp('> ')
-      userWords, timeEnded = set([w.lower() for w in userInp.split()])
-      if userWords == wordsSet:
-        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
-        correctAnsws += 1
+      userWords, timeEnded, reset = set([w.lower() for w in userInp.split()])
+      if reset and ResetAvailable and ResetsN < ResetNum:
+        ResetsN += 1
       else:
-        if not timeEnded:
-          print("Ответ неверный")
+        if userWords == wordsSet:
+          print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+          correctAnsws += 1
         else:
-          print("Время вышло")
-        correctAnsws = 0
-      time.sleep(1)
+          if not timeEnded:
+            print("Ответ неверный")
+          else:
+            print("Время вышло")
+          madeErrs += 1
+          correctAnsws = 0
+          time.sleep(ErrPause)
+      time.sleep(TimePrepWord)
       clear()
+    if madeErrs >= ErrNum - 0.1:
+      return False
+    if ClearErrsEachInRound:
+      madeErrs = 0
+    time.sleep(TimeBetweenRounds)
+  return True
 
 
-def round3(wordsN):
+def stage3(wordsN = wordsInRound):
+  global ResetNum, ResetsN
+  madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
-    while correctAnsws < needCorrectAnsws:
+    while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       words = []
       for _ in range(wordsN):
         words.append(selectWord(i))
       showStr(makeQuestion(words))
       userInp = inp('> ')
-      userWords, timeEnded = [w.lower() for w in userInp.split()]
-      if userWords == words:
-        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
-        correctAnsws += 1
+      userWords, timeEnded,reset = [w.lower() for w in userInp.split()]
+      if reset and ResetAvailable and ResetsN < ResetNum:
+        ResetsN += 1
       else:
-        if not timeEnded:
-          print("Ответ неверный")
+        if userWords == words:
+          print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+          correctAnsws += 1
         else:
-          print("Время вышло")
-        correctAnsws = 0
-      time.sleep(1)
+          if not timeEnded:
+            print("Ответ неверный")
+          else:
+            print("Время вышло")
+          madeErrs += 1
+          correctAnsws = 0
+          time.sleep(ErrPause)
+      time.sleep(TimePrepWord)
       clear()
+    if madeErrs >= ErrNum - 0.1:
+      return False
+    if ClearErrsEachInRound:
+      madeErrs = 0
+    time.sleep(TimeBetweenRounds)
+  return True
 
-def round4(wordsN):
+def stage4(wordsN = wordsInRound):
+  global ResetNum, ResetsN
+  madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
-    while correctAnsws < needCorrectAnsws:
+    while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       words = []
       for _ in range(wordsN):
         words.append(selectWord(i))
       wordsSet = set(words)
       showStr(makeQuestion(words))
       userInp = inp('> ')
-      userWords, timeEnded = set([invert(w.lower()) for w in userInp.split()])
-      if userWords == wordsSet:
-        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
-        correctAnsws += 1
+      userWords, timeEnded, reset = set([invert(w.lower()) for w in userInp.split()])
+      if reset and ResetAvailable and ResetsN < ResetNum:
+        ResetsN += 1
       else:
-        if not timeEnded:
-          print("Ответ неверный")
+        if userWords == wordsSet:
+          print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+          correctAnsws += 1
         else:
-          print("Время вышло")
-        correctAnsws = 0
-      time.sleep(1)
+          if not timeEnded:
+            print("Ответ неверный")
+          else:
+            print("Время вышло")
+          madeErrs += 1
+          correctAnsws = 0
+          time.sleep(ErrPause)
+      time.sleep(TimePrepWord)
       clear()
+    if madeErrs >= ErrNum - 0.1:
+      return False
+    if ClearErrsEachInRound:
+      madeErrs = 0
+    time.sleep(TimeBetweenRounds)
+  return True
 
-def round5(wordsN):
+def stage5(wordsN = wordsInRound):
+  global ResetNum, ResetsN
+  madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
-    while correctAnsws < needCorrectAnsws:
+    while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       words = []
       for _ in range(wordsN):
         words.append(selectWord(i))
       showStr(makeQuestion(words))
-      userInp, timeEnded = inp('> ')
+      userInp, timeEnded, reset = inp('> ')
       userWords = [invert(w.lower()) for w in userInp.split()]
-      if userWords == words:
-        print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
-        correctAnsws += 1
+      if reset and ResetAvailable and ResetsN < ResetNum:
+        ResetsN += 1
       else:
-        if not timeEnded:
-          print("Ответ неверный")
+        if userWords == words:
+          print("Отвечено {}/{}".format(correctAnsws + 1, needCorrectAnsws))
+          correctAnsws += 1
         else:
-          print("Время вышло")
-        correctAnsws = 0
-      time.sleep(1)
+          if not timeEnded:
+            print("Ответ неверный")
+          else:
+            print("Время вышло")
+          madeErrs += 1
+          correctAnsws = 0
+          time.sleep(ErrPause)
+      time.sleep(TimePrepWord)
       clear()
+    if madeErrs >= ErrNum - 0.1:
+      return False
+    if ClearErrsEachInRound:
+      madeErrs = 0
+    time.sleep(TimeBetweenRounds)
+  return True
 
+def selectDifficulty():
+  d = ""
+  while d not in ["1", "2", "3"]:
+    d = input("Select difficulty from 1 to 3: ")
+  return d
+  
+
+rounds = [stage1, stage2, stage3, stage4, stage5]
 def main ():
+  global TimeDisplay, TimeInput, ErrNum, ErrsInRoundOrStage, ErrPause, ResetsN
+  global ResetAvailable, ResetNum, TimePrepWord, TimeBetweenRounds, ClearErrsEachInRound
+  difficulty = selectDifficulty()
   clear()
-  round1()
-  round2(wordsInRound)
-  round3(wordsInRound)
-  round4(wordsInRound)
-  round5(wordsInRound)
+  for i in range(len(rounds)):
+    currConfig = settings["stage" + str(i + 1)]["difficulty" + str(difficulty)]
+    
+    TimeDisplay = currConfig["TimeDisplay"]
+    TimeInput = currConfig["TimeInput"]
+    ErrNum = float(currConfig["ErrNum"])
+    ClearErrsEachInRound = currConfig["ClearErrsEachInRound"]
+    ErrPause = currConfig["ErrPause"]
+    ResetAvailable = currConfig["ResetAvailable"]
+    ResetNum = currConfig["ResetNum"]
+    TimePrepWord = currConfig["TimePrepWord"]
+    TimeBetweenRounds = currConfig["TimeBetweenRounds"]
+    ResetsN = 0
+    completed = rounds[i]()
+    if not completed:
+      return False
+  
+    if i != len(rounds) - 1:
+      time.sleep(TimeBetweenStages)
 
-main()
+    return True
+
+won = main()
+if won:
+  print("You won!!!")
+else:
+  print("You lost")

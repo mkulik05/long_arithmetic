@@ -1,0 +1,181 @@
+{
+  "stage1": {
+    "difficulty1" : {
+      "TimeDisplay": 1,
+      "TimeInput": 10,
+      "ErrNum": "INF",
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1.5,
+      "ResetAvailable": true,
+      "ResetNum": 3,
+      "TimePrepWord": 1,
+      "TimeBetweenRounds": 1.5
+    },
+    "difficulty2" : {
+      "TimeDisplay": 0.5,
+      "TimeInput": 5,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1,
+      "ResetAvailable": true,
+      "ResetNum": 1,
+      "TimePrepWord": 0.75,
+      "TimeBetweenRounds": 1.25
+    },
+    "difficulty3" : {
+      "TimeDisplay": 0.33,
+      "TimeInput": 3,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": false,
+      "ErrPause": 0.5,
+      "ResetAvailable": false,
+      "ResetNum": 0,
+      "TimePrepWord": 0.5,
+      "TimeBetweenRounds": 1
+    }
+  },
+
+  "stage2": {
+    "difficulty1" : {
+      "TimeDisplay": 5,
+      "TimeInput": 30,
+      "ErrNum": "INF",
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1.5,
+      "ResetAvailable": true,
+      "ResetNum": 3,
+      "TimePrepWord": 1,
+      "TimeBetweenRounds": 1.5
+    },
+    "difficulty2" : {
+      "TimeDisplay": 2.5,
+      "TimeInput": 20,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1,
+      "ResetAvailable": true,
+      "ResetNum": 1,
+      "TimePrepWord": 0.75,
+      "TimeBetweenRounds": 1.25
+    },
+    "difficulty3" : {
+      "TimeDisplay": 1.5,
+      "TimeInput": 12.5,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": false,
+      "ErrPause": 0.5,
+      "ResetAvailable": false,
+      "ResetNum": 0,
+      "TimePrepWord": 0.5,
+      "TimeBetweenRounds": 1
+    }
+  },
+
+  "stage3": {
+    "difficulty1" : {
+      "TimeDisplay": 5,
+      "TimeInput": 30,
+      "ErrNum": "INF",
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1.5,
+      "ResetAvailable": true,
+      "ResetNum": 3,
+      "TimePrepWord": 1,
+      "TimeBetweenRounds": 1.5
+    },
+    "difficulty2" : {
+      "TimeDisplay": 2.5,
+      "TimeInput": 20,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1,
+      "ResetAvailable": true,
+      "ResetNum": 1,
+      "TimePrepWord": 0.75,
+      "TimeBetweenRounds": 1.25
+    },
+    "difficulty3" : {
+      "TimeDisplay": 1.5,
+      "TimeInput": 12.5,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": false,
+      "ErrPause": 0.5,
+      "ResetAvailable": false,
+      "ResetNum": 0,
+      "TimePrepWord": 0.5,
+      "TimeBetweenRounds": 1
+    }
+  },
+
+  "stage4": {
+    "difficulty1" : {
+      "TimeDisplay": 5,
+      "TimeInput": 40,
+      "ErrNum": "INF",
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1.5,
+      "ResetAvailable": true,
+      "ResetNum": 3,
+      "TimePrepWord": 1,
+      "TimeBetweenRounds": 1.5
+    },
+    "difficulty2" : {
+      "TimeDisplay": 2.5,
+      "TimeInput": 25,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1,
+      "ResetAvailable": true,
+      "ResetNum": 1,
+      "TimePrepWord": 0.75,
+      "TimeBetweenRounds": 1.25
+    },
+    "difficulty3" : {
+      "TimeDisplay": 1.5,
+      "TimeInput": 17.5,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": false,
+      "ErrPause": 0.5,
+      "ResetAvailable": false,
+      "ResetNum": 0,
+      "TimePrepWord": 0.5,
+      "TimeBetweenRounds": 1
+    }
+  },
+
+  "stage5": {
+    "difficulty1" : {
+      "TimeDisplay": 5,
+      "TimeInput": 40,
+      "ErrNum": "INF",
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1.5,
+      "ResetAvailable": true,
+      "ResetNum": 3,
+      "TimePrepWord": 1,
+      "TimeBetweenRounds": 1.5
+    },
+    "difficulty2" : {
+      "TimeDisplay": 2.5,
+      "TimeInput": 25,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": true,
+      "ErrPause": 1,
+      "ResetAvailable": true,
+      "ResetNum": 1,
+      "TimePrepWord": 0.75,
+      "TimeBetweenRounds": 1.25
+    },
+    "difficulty3" : {
+      "TimeDisplay": 1.5,
+      "TimeInput": 17.5,
+      "ErrNum": 3,
+      "ClearErrsEachInRound": false,
+      "ErrPause": 0.5,
+      "ResetAvailable": false,
+      "ResetNum": 0,
+      "TimePrepWord": 0.5,
+      "TimeBetweenRounds": 1
+    }
+  }
+}
