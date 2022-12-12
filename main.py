@@ -1,16 +1,4 @@
 import os
-
-try:
-  import inputimeout
-except:
-  os.system('pip install inputimeout')
-
-try:
-  import hashlib
-except:
-  os.system('pip install hashlib')
-
-import os
 import requests
 
 folderName = 'data'
