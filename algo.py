@@ -35,7 +35,7 @@ def selectWord(len):
 def stage1 ():
   global ResetNum, ResetsN, enableAnswerDelay
   madeErrs = 0
-  for i in range(5, 6):
+  for i in range(5, 9):
     correctAnsws = 0
     while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       word = selectWord(i)
