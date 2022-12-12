@@ -1,7 +1,7 @@
 {
   "stage1": {
     "difficulty1" : {
-      "TimeDisplay": 1,
+      "TimeDisplay": 3,
       "TimeInput": 10,
       "enableAnswerDelay": false,
       "ErrNum": "INF",

@@ -35,12 +35,12 @@ def selectWord(len):
 def stage1 ():
   global ResetNum, ResetsN, enableAnswerDelay
   madeErrs = 0
-  for i in range(5, 9):
+  for i in range(5, 6):
     correctAnsws = 0
     while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       word = selectWord(i)
       showStr(word, TimeDisplay)
-      userWord, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
+      userWord, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay, 1)
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
       else:
@@ -75,7 +75,7 @@ def stage2(wordsN = wordsInRound):
         words.append(selectWord(i))
       wordsSet = set(words)
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay, 5)
       userWords = set([w.lower() for w in userInp.split()])
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -111,7 +111,7 @@ def stage3(wordsN = wordsInRound):
       for _ in range(wordsN):
         words.append(selectWord(i))
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay, 5)
       userWords = [w.lower() for w in userInp.split()]
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -147,7 +147,7 @@ def stage4(wordsN = wordsInRound):
         words.append(selectWord(i))
       wordsSet = set(words)
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay, 5)
       userWords = set([invert(w.lower()) for w in userInp.split()])
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -182,7 +182,7 @@ def stage5(wordsN = wordsInRound):
       for _ in range(wordsN):
         words.append(selectWord(i))
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay, 5)
       userWords = [invert(w.lower()) for w in userInp.split()]
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -241,7 +241,7 @@ def main ():
     if i != len(rounds) - 1:
       time.sleep(TimeBetweenStages)
 
-    return True
+  return True
 
 def launch():
   won = main()
