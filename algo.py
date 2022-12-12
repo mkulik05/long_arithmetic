@@ -10,11 +10,11 @@ wordsInRound = 5            # количество слов в раундах 2-
 TimeBetweenStages = 3
 
 
-f = open("data.json")
+f = open("data/data.json")
 data = f.read()
 words = json.loads(data)
 
-f = open("settings.json")
+f = open("data/settings.json")
 data = f.read()
 settings = json.loads(data)
 
@@ -244,6 +244,7 @@ def main ():
   return True
 
 def launch():
+  clear()
   won = main()
   if won:
     showMsg("Вы победили!!!")

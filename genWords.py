@@ -1,5 +1,5 @@
 import json
-f = open("words.txt")
+f = open("data/words.txt")
 words = f.read().split('\n')
 data = {}
 for word in words:
@@ -10,7 +10,7 @@ for word in words:
     else:
       data[l] = []
 
-f = open("data.json", "w")
+f = open("data/data.json", "w")
 f.write(json.dumps(data))
 f.close()
 
