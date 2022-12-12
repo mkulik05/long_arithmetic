@@ -12,7 +12,7 @@ if not os.path.exists(folderName):
 
 if not os.path.exists(dataPath):
   print("> Donwnloading required data")
-  response = requests.get(settingsUrl)
+  response = requests.get(dataUrl)
   open(dataPath, "wb").write(response.content)
 
 if not os.path.exists(settingsPath):
