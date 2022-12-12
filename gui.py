@@ -11,13 +11,16 @@ else:
 def showMsg(message):
   print(message)
 
-def inp (delay, text):
+def inp (delay, text, enableAnswerDelay):
   timeEnded = False
-  try:
-    res = inputimeout(prompt=text, timeout=delay)
-  except Exception:
-    res = ''
-    timeEnded = True
+  if enableAnswerDelay:
+    try:
+      res = inputimeout(prompt=text, timeout=delay)
+    except Exception:
+      res = ''
+      timeEnded = True
+  else:
+    res = input(text)
   reset = False
   return res, timeEnded, reset
 

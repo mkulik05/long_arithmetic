@@ -9,6 +9,7 @@ needCorrectAnsws = 3        # количество правильным отве
 wordsInRound = 5            # количество слов в раундах 2-5
 TimeBetweenStages = 3
 
+
 f = open("data.json")
 data = f.read()
 words = json.loads(data)
@@ -32,14 +33,14 @@ def selectWord(len):
 
 
 def stage1 ():
-  global ResetNum, ResetsN
+  global ResetNum, ResetsN, enableAnswerDelay
   madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
     while correctAnsws < needCorrectAnsws and madeErrs < ErrNum + 0.1:
       word = selectWord(i)
       showStr(word, TimeDisplay)
-      userWord, timeEnded, reset = inp(TimeInput, '> ')
+      userWord, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
       else:
@@ -64,7 +65,7 @@ def stage1 ():
   return True
 
 def stage2(wordsN = wordsInRound):
-  global ResetNum, ResetsN
+  global ResetNum, ResetsN, enableAnswerDelay
   madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
@@ -74,7 +75,7 @@ def stage2(wordsN = wordsInRound):
         words.append(selectWord(i))
       wordsSet = set(words)
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ')
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
       userWords = set([w.lower() for w in userInp.split()])
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -101,7 +102,7 @@ def stage2(wordsN = wordsInRound):
 
 
 def stage3(wordsN = wordsInRound):
-  global ResetNum, ResetsN
+  global ResetNum, ResetsN, enableAnswerDelay
   madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
@@ -110,7 +111,7 @@ def stage3(wordsN = wordsInRound):
       for _ in range(wordsN):
         words.append(selectWord(i))
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ')
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
       userWords = [w.lower() for w in userInp.split()]
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -136,7 +137,7 @@ def stage3(wordsN = wordsInRound):
   return True
 
 def stage4(wordsN = wordsInRound):
-  global ResetNum, ResetsN
+  global ResetNum, ResetsN, enableAnswerDelay
   madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
@@ -146,7 +147,7 @@ def stage4(wordsN = wordsInRound):
         words.append(selectWord(i))
       wordsSet = set(words)
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ')
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
       userWords = set([invert(w.lower()) for w in userInp.split()])
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -172,7 +173,7 @@ def stage4(wordsN = wordsInRound):
   return True
 
 def stage5(wordsN = wordsInRound):
-  global ResetNum, ResetsN
+  global ResetNum, ResetsN, enableAnswerDelay
   madeErrs = 0
   for i in range(5, 9):
     correctAnsws = 0
@@ -181,7 +182,7 @@ def stage5(wordsN = wordsInRound):
       for _ in range(wordsN):
         words.append(selectWord(i))
       showStr(makeQuestion(words), TimeDisplay)
-      userInp, timeEnded, reset = inp(TimeInput, '> ')
+      userInp, timeEnded, reset = inp(TimeInput, '> ', enableAnswerDelay)
       userWords = [invert(w.lower()) for w in userInp.split()]
       if reset and ResetAvailable and ResetsN < ResetNum:
         ResetsN += 1
@@ -215,7 +216,7 @@ def selectDifficulty():
 
 rounds = [stage1, stage2, stage3, stage4, stage5]
 def main ():
-  global TimeDisplay, TimeInput, ErrNum, ErrsInRoundOrStage, ErrPause, ResetsN
+  global TimeDisplay, TimeInput, ErrNum, ErrsInRoundOrStage, ErrPause, ResetsN, enableAnswerDelay
   global ResetAvailable, ResetNum, TimePrepWord, TimeBetweenRounds, ClearErrsEachInRound
   difficulty = selectDifficulty()
   clear()
@@ -231,6 +232,7 @@ def main ():
     ResetNum = currConfig["ResetNum"]
     TimePrepWord = currConfig["TimePrepWord"]
     TimeBetweenRounds = currConfig["TimeBetweenRounds"]
+    enableAnswerDelay = currConfig["enableAnswerDelay"]
     ResetsN = 0
     completed = rounds[i]()
     if not completed:
