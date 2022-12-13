@@ -1,5 +1,5 @@
 
-from algo import invert, strMatch, makeQuestion, selectWord
+from src.algo import invert, strMatch, makeQuestion, selectWord
 import json
 
 class Testing:
