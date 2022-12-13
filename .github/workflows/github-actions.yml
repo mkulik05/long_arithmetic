@@ -93,7 +93,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: PyPi - Build binary wheel and source tarball
-      run: |
+      run: | 
         python -m build --sdist --wheel --outdir dist/
     - name: PyPi - Publish to PyPI
       uses: pypa/gh-action-pypi-publish@master
