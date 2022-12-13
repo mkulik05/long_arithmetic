@@ -1,21 +1,24 @@
-name: Build GUI exe with Pyinstaller
-
 on:
-  [push]
+  push:
+
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows-latest', 'ubuntu-latest, 'macos-latest']
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
 
-    - name: Package Application
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with: 
-        path: .
-
+    - run: pip install -r requirements.txt pyinstaller
+    - run: pyinstaller main.py
+    # Optionally verify that it works (provided that it does not need user interaction)
+    # - run: ./dist/your-code/your-code
     - uses: actions/upload-artifact@v2
       with:
-        name: my-app
-        path: src/
+        path: dist/*
