@@ -19,6 +19,6 @@ if not os.path.exists(settingsPath):
   print("> Donwnloading required settings")
   response = requests.get(settingsUrl)
   open(settingsPath, "wb").write(response.content)
-
+ 
 from algo import launch
 launch()
