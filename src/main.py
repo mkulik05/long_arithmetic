@@ -13,7 +13,7 @@ settingsFileHash = "d25e9937905d3bba47347f91c3434e30cd8ce74d"
 settingsPath = "data/settings.json"
 settingsUrl = "https://gist.githubusercontent.com/mkulik05/a56725ea4b1866db0453814b83434873/raw/0ef8fd8b2a5fe27519fc71958701639c2a332785/settings.json"
 
-def hash_file(filename):
+def hash_file(filename): 
    """"This function returns the SHA-1 hash
    of the file passed into it"""
 
