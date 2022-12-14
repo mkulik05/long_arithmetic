@@ -250,3 +250,4 @@ def launch():
     showMsg("Вы победили!!!")
   else:
     showMsg("Вы проиграли")
+  time.sleep(5)
